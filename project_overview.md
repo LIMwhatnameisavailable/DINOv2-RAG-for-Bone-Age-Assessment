@@ -199,7 +199,7 @@
 | 数据集 | 类型 | 规模 | 位置 |
 |--------|------|------|------|
 | **RSNA Bone Age Dataset** | 公开 (RSNA 2017) | ~12,611 训练 + ~200 测试 | `骨龄/bone/boneage-training-dataset/` |
-| **RHPE Dataset** (主要) | 私有 | ~5,496 训练 + ~716 验证 + ~80 测试 | `骨龄/bone/RHPE_train/`, `RHPE_val/`, `RHPE_test/` |
+| **RHPE Dataset** (主要) | 半公开 | ~5,496 训练 + ~716 验证 + ~80 测试 | `骨龄/bone/RHPE_train/`, `RHPE_val/`, `RHPE_test/` |
 | **WeChat (微信) Dataset** | 私有 | ~44 张图像 | `骨龄/weixin_imgs/` |
 
 ### 架构与流水线
