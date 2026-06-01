@@ -1,6 +1,6 @@
 # 骨龄评估迁移实验 — LIM 工作区完整指南
 
-> 版本：v1.1 | 创建日期：2026-06-01 | 适用范围：LIM/ 工作区全部实验
+> 版本：v1.2 | 创建日期：2026-06-01 | 适用范围：LIM/ 工作区全部实验
 > 本文档是项目执行的重要参考，所有脚本、数据、结果均存放于 LIM/ 目录下。
 > LIM/ 与 骨龄/、bone/ 平级（均在项目根目录下，即 骨龄项目/ 目录）。
 
@@ -82,101 +82,27 @@ WeChat/weixin_imgs 数据集：数据来源不清晰，**本项目完全不使�
 
 **所有内容必须存放于 LIM/ 目录下，禁止在原始位置（bone/）写入任何新文件。**
 LIM/ 与 骨龄/ （代码仓库根目录）、bone/（数据目录）平级。
+项目根目录 骨龄项目/ 下还包含 archive/（原始数据集归档，见第 4.1 节）。
 
 ```
-LIM/
+骨龄项目/
 │
-├── code/                          ← 所有脚本（从 bone/code/ 迁移并修改）
-│   ├── build_vision_library.py    ← 迁移自 bone/code/vision/build_vision_library.py
-│   ├── train_mlp.py               ← 迁移自 bone/code/train/train_mlp_from_embeddings.py
-│   ├── infer_rhpe.py              ← 新建：RHPE 跨数据集推理脚本
-│   ├── analyze_results.py         ← 新建：结果分析与可视化主脚本
-│   └── utils/
-│       ├── gw_mae.py              ← GW-MAE 损失函数实现
-│       ├── vis_style.py           ← 可视化样式配置（见第 9 节）
-│       └── data_utils.py          ← 数据加载工具函数
-│
-├── embeddings/                    ← 所有 Backbone 提取的 embedding
-│   ├── rsna/
-│   │   ├── resnet50/
-│   │   │   ├── embeddings/        ← *.npy 文件，每张图一个
-│   │   │   └── metadata/
-│   │   │       └── rsna_metadata.csv
-│   │   ├── efficientnet_b4/
-│   │   │   ├── embeddings/
-│   │   │   └── metadata/
-│   │   ├── dinov2_vits/
-│   │   │   ├── embeddings/
-│   │   │   └── metadata/
-│   │   ├── dinov2_vitb/
-│   │   │   ├── embeddings/
-│   │   │   └── metadata/
-│   │   ├── dinov2_vitl/
-│   │   │   ├── embeddings/
-│   │   │   └── metadata/
-│   │   └── dinov2_vitg/
-│   │       ├── embeddings/
-│   │       └── metadata/
-│   └── rhpe/
-│       ├── resnet50/
-│       │   ├── embeddings/
-│       │   └── metadata/
-│       ├── efficientnet_b4/
-│       │   ├── embeddings/
-│       │   └── metadata/
-│       ├── dinov2_vits/
-│       │   ├── embeddings/
-│       │   └── metadata/
-│       ├── dinov2_vitb/
-│       │   ├── embeddings/
-│       │   └── metadata/
-│       ├── dinov2_vitl/
-│       │   ├── embeddings/
-│       │   └── metadata/
-│       └── dinov2_vitg/
-│           ├── embeddings/
-│           └── metadata/
-│
-├── experiments/                   ← 所有训练实验结果
-│   ├── E01_resnet50_mae_nogender/
-│   ├── E02_resnet50_mae_gender/
-│   ├── E03_resnet50_gwmae_gender/
-│   ├── E04_resnet50_combined_gender/
-│   ├── E05_effb4_mae_nogender/
-│   ├── E06_effb4_mae_gender/
-│   ├── E07_effb4_gwmae_gender/
-│   ├── E08_effb4_combined_gender/
-│   ├── E09_vits_mae_nogender/
-│   ├── E10_vits_mae_gender/
-│   ├── E11_vits_gwmae_gender/
-│   ├── E12_vits_combined_gender/
-│   ├── E13_vitb_mae_nogender/
-│   ├── E14_vitb_mae_gender/
-│   ├── E15_vitb_gwmae_gender/
-│   ├── E16_vitb_combined_gender/
-│   ├── E17_vitl_mae_nogender/
-│   ├── E18_vitl_mae_gender/
-│   ├── E19_vitl_gwmae_gender/
-│   ├── E20_vitl_combined_gender/
-│   ├── E21_vitg_mae_nogender/
-│   ├── E22_vitg_mae_gender/
-│   ├── E23_vitg_gwmae_gender/
-│   └── E24_vitg_combined_gender/
-│   （每个实验目录内容见第 10 节）
-│
-├── generalization/                ← 跨数据集泛化实验结果
-│   ├── best_model_on_rhpe/        ← 最优 RSNA 模型在 RHPE 上的推理结果
-│   └── summary_generalization.csv
-│
-└── figures/                       ← 所有输出图表
-    ├── backbone_comparison.png
-    ├── loss_ablation.png
-    ├── gender_analysis.png
-    ├── age_error_heatmap.png
-    ├── gw_mae_weight_curve.png
-    ├── generalization_comparison.png
-    └── error_distribution_by_age_group.png
-```
+├── LIM/                          ← 工作区（所有代码、结果、图表）
+│   ├── code/
+│   │   ├── build_vision_library.py
+│   │   ├── train_mlp.py
+│   │   ├── infer_rhpe.py
+│   │   ├── analyze_results.py
+│   │   └── utils/
+│   │       ├── gw_mae.py
+│   │       ├── vis_style.py
+│   │       └── data_utils.py
+│   ├── embeddings/
+│   │   ├── rsna/ ...（6 个 backbone）
+│   │   └── rhpe/ ...（6 个 backbone）
+│   ├── experiments/ ...（24 个实验）
+│   ├── generalization/
+│   └── figures/
 
 ---
 
@@ -249,11 +175,22 @@ FIG_ROOT     = os.path.join(LIM_ROOT, "figures")
 
 ### 4.1 RSNA 数据集
 
+**数据来源：** Kaggle 比赛 [rsna-bone-age](https://www.kaggle.com/competitions/rsna-bone-age)（比赛页面已下线）。
+原始训练集 ZIP 约 1.2 GB，解压后约 9.2 GB。
+
+**归档位置：** `archive/boneage-training-dataset/`（项目根目录下，与 LIM/ 平级）。
+若 `骨龄/bone/boneage-training-dataset/` 下图片损坏或缺失，可从 archive 重新复制：
+
+```powershell
+Copy-Item "archive/boneage-training-dataset/boneage-training-dataset/*.png"`
+  "骨龄/bone/boneage-training-dataset/boneage-training-dataset/" -Force
+```
+
 **图片路径规则：**
 ```
 骨龄/bone/boneage-training-dataset/boneage-training-dataset/{id}.png
 ```
-ID 范围：10000–22611，共 12,611 张。
+ID 范围：10000–22611，共 12,611 张（全部已验证非空）。
 
 **标签 CSV（boneage-training-dataset.csv）列说明：**
 
