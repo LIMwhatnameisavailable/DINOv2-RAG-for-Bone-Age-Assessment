@@ -1,7 +1,8 @@
 # 骨龄评估迁移实验 — LIM 工作区完整指南
 
-> 版本：v1.0 | 创建日期：2026-06-01 | 适用范围：骨龄/LIM/ 工作区全部实验
-> 本文档是项目执行的重要参考，所有脚本、数据、结果均存放于 骨龄/LIM/ 目录下。
+> 版本：v1.1 | 创建日期：2026-06-01 | 适用范围：LIM/ 工作区全部实验
+> 本文档是项目执行的重要参考，所有脚本、数据、结果均存放于 LIM/ 目录下。
+> LIM/ 与 骨龄/、bone/ 平级（均在项目根目录下，即 骨龄项目/ 目录）。
 
 ---
 
@@ -79,10 +80,11 @@ WeChat/weixin_imgs 数据集：数据来源不清晰，**本项目完全不使�
 
 ## 2. 目录结构
 
-**所有内容必须存放于 骨龄/LIM/ 目录下，禁止在原始位置（骨龄/bone/）写入任何新文件。**
+**所有内容必须存放于 LIM/ 目录下，禁止在原始位置（bone/）写入任何新文件。**
+LIM/ 与 骨龄/ （代码仓库根目录）、bone/（数据目录）平级。
 
 ```
-骨龄/LIM/
+LIM/
 │
 ├── code/                          ← 所有脚本（从 bone/code/ 迁移并修改）
 │   ├── build_vision_library.py    ← 迁移自 bone/code/vision/build_vision_library.py
@@ -207,29 +209,31 @@ conda run -n boneage pip install timm efficientnet_pytorch matplotlib seaborn sc
 
 ### 3.3 路径常量（所有脚本顶部统一定义）
 
-所有脚本必须在顶部定义以下路径常量，**不得硬编码绝对路径到其他位置**：
+所有脚本必须在顶部定义以下路径常量，**不得硬编码绝对路径到其他位置**。
+
+LIM/ 与 骨龄/、bone/ 平级，因此 `LIM_ROOT/../骨龄/bone/` 即为数据目录。
+所有数据路径统一通过 `LIM_ROOT/../骨龄/bone/...` 引用。
 
 ```python
 import os
 
 # ── 项目根目录（相对于脚本位置自动推导，无需修改）──
-SCRIPT_DIR   = os.path.dirname(os.path.abspath(__file__))
-LIM_ROOT     = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))   # 骨龄/LIM/
+SCRIPT_DIR   = os.path.dirname(os.path.abspath(__file__))          # LIM/code/utils/
+LIM_ROOT     = os.path.abspath(os.path.join(SCRIPT_DIR, "../.."))   # LIM/
+DATA_ROOT    = os.path.join(LIM_ROOT, "..", "骨龄", "bone")        # 骨龄/bone/
 
 # ── 原始数据（只读，禁止写入）──
-RSNA_IMG_DIR = os.path.join(LIM_ROOT, "..", "bone", "boneage-training-dataset",
+RSNA_IMG_DIR = os.path.join(DATA_ROOT, "boneage-training-dataset",
                              "boneage-training-dataset")
-RSNA_TRAIN_CSV = os.path.join(LIM_ROOT, "..", "bone",
-                               "boneage-training-dataset.csv")
-RSNA_TEST_CSV  = os.path.join(LIM_ROOT, "..", "bone",
-                               "boneage-test-dataset.csv")
+RSNA_TRAIN_CSV = os.path.join(DATA_ROOT, "boneage-training-dataset.csv")
+RSNA_TEST_CSV  = os.path.join(DATA_ROOT, "boneage-test-dataset.csv")
 
-RHPE_TRAIN_IMG = os.path.join(LIM_ROOT, "..", "bone", "RHPE_train", "images")
-RHPE_VAL_IMG   = os.path.join(LIM_ROOT, "..", "bone", "RHPE_val",   "images")
-RHPE_TEST_IMG  = os.path.join(LIM_ROOT, "..", "bone", "RHPE_test",  "images")
-RHPE_TRAIN_CSV = os.path.join(LIM_ROOT, "..", "bone", "RHPE_Annotations",
+RHPE_TRAIN_IMG = os.path.join(DATA_ROOT, "RHPE_train", "images")
+RHPE_VAL_IMG   = os.path.join(DATA_ROOT, "RHPE_val",   "images")
+RHPE_TEST_IMG  = os.path.join(DATA_ROOT, "RHPE_test",  "images")
+RHPE_TRAIN_CSV = os.path.join(DATA_ROOT, "RHPE_Annotations",
                                "RHPE_Annotations", "BONEAGE", "boneage_train.csv")
-RHPE_VAL_CSV   = os.path.join(LIM_ROOT, "..", "bone", "RHPE_Annotations",
+RHPE_VAL_CSV   = os.path.join(DATA_ROOT, "RHPE_Annotations",
                                "RHPE_Annotations", "BONEAGE", "boneage_val.csv")
 
 # ── LIM 工作区输出目录（可写）──
@@ -360,7 +364,7 @@ check_dataset_integrity(RHPE_VAL_CSV,   RHPE_VAL_IMG,   "ID", "{:05d}.png")
 
 ```bash
 # 上传脚本（轻量，每次修改后重传）
-scp LIM/code/build_vision_library.py user@server:/path/to/骨龄/LIM/code/
+scp LIM/code/build_vision_library.py user@server:/path/to/LIM/code/
 
 # 上传数据（仅首次，数据量大，建议 rsync 断点续传）
 rsync -avz --progress 骨龄/bone/boneage-training-dataset/ \
@@ -415,7 +419,7 @@ tail -f LIM/logs/vitg_rsna.log
 
 ```bash
 # 在服务器上打包（减少传输文件数量）
-cd 骨龄/LIM/embeddings/rsna
+cd LIM/embeddings/rsna
 tar -czf dinov2_vitb.tar.gz dinov2_vitb/
 tar -czf dinov2_vitl.tar.gz dinov2_vitl/
 tar -czf dinov2_vitg.tar.gz dinov2_vitg/
@@ -430,7 +434,7 @@ tar -czf dinov2_vitg.tar.gz dinov2_vitg/
 在本地接收：
 
 ```bash
-scp user@server:/path/to/骨龄/LIM/embeddings/rsna/dinov2_vitg.tar.gz \
+scp user@server:/path/to/LIM/embeddings/rsna/dinov2_vitg.tar.gz \
     LIM/embeddings/rsna/
 
 # 解压
