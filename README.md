@@ -21,8 +21,11 @@
 | RHPE | 6,204 张 | 12–228 月 | 跨数据集泛化测试（仅推理） |
 
 > 两个数据集均为公开数据集，不随代码一并发布。
-> - RSNA Bone Age 2017：https://www.kaggle.com/competitions/rsna-bone-age
-> - RHPE：https://zenodo.org/records/7041046
+> - RSNA Bone Age 2017：https://www.rsna.org/artificial-intelligence/ai-image-challenge/rsna-pediatric-bone-age-challenge-2017
+>   （Kaggle 镜像：https://www.kaggle.com/datasets/kmader/rsna-bone-age）
+> - RHPE：https://bcv-uniandes.github.io/baar-wp/
+>   （Kaggle 镜像：https://www.kaggle.com/datasets/ipythonx/rhpe-bone-age）
+
 
 
 ## 方法框架
@@ -41,7 +44,6 @@
   [阶段三] 跨数据集零样本推理（infer_rhpe.py）
        ↓
   [阶段四] 分析与可视化（analyze_results.py）
-
 ```
 
 ## 骨干网络与特征维度
