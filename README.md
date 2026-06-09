@@ -20,11 +20,10 @@
 | RSNA Bone Age 2017 | 12,611 张 | 12–228 月 | 训练 / 内部测试 |
 | RHPE | 6,204 张 | 12–228 月 | 跨数据集泛化测试（仅推理） |
 
-> 两个数据集均为公开数据集，不随代码一并发布。
-> - RSNA Bone Age 2017：https://www.rsna.org/artificial-intelligence/ai-image-challenge/rsna-pediatric-bone-age-challenge-2017
->   （Kaggle 镜像：https://www.kaggle.com/datasets/kmader/rsna-bone-age）
-> - RHPE：https://bcv-uniandes.github.io/baar-wp/
->   （Kaggle 镜像：https://www.kaggle.com/datasets/ipythonx/rhpe-bone-age）
+两个数据集均为公开数据集，不随代码一并发布。
+- RSNA Bone Age 2017：https://www.rsna.org/artificial-intelligence/ai-image-challenge/rsna-pediatric-bone-age-challenge-2017
+  （Kaggle 镜像：https://www.kaggle.com/datasets/kmader/rsna-bone-age）
+- RHPE：https://bcv-uniandes.github.io/baar-wp/
 
 
 
