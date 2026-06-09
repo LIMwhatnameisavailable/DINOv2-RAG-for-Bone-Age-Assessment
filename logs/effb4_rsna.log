@@ -1,0 +1,1 @@
+Error while loading conda entry point: conda-libmamba-solver (/mnt/disk2/srtp2024/miniconda3/lib/python3.13/site-packages/libmambapy/../../../libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /mnt/disk2/srtp2024/miniconda3/lib/python3.13/site-packages/libmambapy/bindings.cpython-313-x86_64-linux-gnu.so))

@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"D:/Ana/envs/boneage/python.exe\" code/build_generalization_summary.py)"
+    ]
+  }
+}

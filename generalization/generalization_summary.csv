@@ -1,0 +1,7 @@
+backbone,rsna_exp_id,rsna_mae,rsna_rmse,rsna_r2,rhpe_mae,rhpe_rmse,rhpe_r2,rhpe_num_samples,generalization_gap,backbone_label
+resnet50,E02,14.1021,18.1603,0.8122,18.8376,24.1144,,6204,33.6000,ResNet-50
+efficientnet_b4,E06,11.6040,14.9754,0.8723,16.6566,21.4557,,6204,43.5000,EfficientNet-B4
+dinov2_vits,E10,8.6367,11.1934,0.9215,16.8198,21.2809,,6204,94.7000,ViT-S
+dinov2_vitb,E14,8.2447,10.6989,0.9301,15.0266,18.8628,,6204,82.3000,ViT-B
+dinov2_vitl,E18,9.1574,12.0525,0.9173,15.2288,18.9882,,6204,66.3000,ViT-L
+dinov2_vitg,E22,8.6370,11.3654,0.9264,28.2096,33.0334,,6204,226.6000,ViT-g

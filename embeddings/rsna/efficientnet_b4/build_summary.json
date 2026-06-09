@@ -1,0 +1,14 @@
+{
+  "dataset": "rsna",
+  "model": "efficientnet_b4",
+  "feat_dim": 1792,
+  "device": "cuda",
+  "num_samples": 12611,
+  "new_samples": 10819,
+  "existing_samples": 1792,
+  "elapsed_seconds": 578.1,
+  "embeddings_dir": "LIM/embeddings/rsna/efficientnet_b4/embeddings",
+  "metadata_path": "LIM/embeddings/rsna/efficientnet_b4/metadata/rsna_metadata.csv",
+  "img_dir": "/mnt/disk2/srtp2024/LIM/CCBBD/LIM_data/rsna/images",
+  "label_csv": "/mnt/disk2/srtp2024/LIM/CCBBD/LIM_data/rsna/labels.csv"
+}

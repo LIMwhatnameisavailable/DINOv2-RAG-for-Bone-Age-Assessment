@@ -1,0 +1,14 @@
+{
+  "dataset": "rhpe",
+  "model": "resnet50",
+  "feat_dim": 2048,
+  "device": "cuda",
+  "num_samples": 6204,
+  "new_samples": 3260,
+  "existing_samples": 2944,
+  "elapsed_seconds": 654.5,
+  "embeddings_dir": "LIM/embeddings/rhpe/resnet50/embeddings",
+  "metadata_path": "LIM/embeddings/rhpe/resnet50/metadata/rhpe_metadata.csv",
+  "img_dir": "/mnt/disk2/srtp2024/LIM/CCBBD/LIM_data/rhpe/images",
+  "label_csv": "/mnt/disk2/srtp2024/LIM/CCBBD/LIM_data/rhpe/labels.csv"
+}

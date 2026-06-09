@@ -1,0 +1,14 @@
+{
+  "dataset": "rhpe",
+  "model": "efficientnet_b4",
+  "feat_dim": 1792,
+  "device": "cuda",
+  "num_samples": 6204,
+  "new_samples": 6204,
+  "existing_samples": 0,
+  "elapsed_seconds": 654.6,
+  "embeddings_dir": "LIM/embeddings/rhpe/efficientnet_b4/embeddings",
+  "metadata_path": "LIM/embeddings/rhpe/efficientnet_b4/metadata/rhpe_metadata.csv",
+  "img_dir": "/mnt/disk2/srtp2024/LIM/CCBBD/LIM_data/rhpe/images",
+  "label_csv": "/mnt/disk2/srtp2024/LIM/CCBBD/LIM_data/rhpe/labels.csv"
+}

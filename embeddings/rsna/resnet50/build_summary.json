@@ -1,0 +1,14 @@
+{
+  "dataset": "rsna",
+  "model": "resnet50",
+  "feat_dim": 2048,
+  "device": "cuda",
+  "num_samples": 12611,
+  "new_samples": 10819,
+  "existing_samples": 1792,
+  "elapsed_seconds": 959.1,
+  "embeddings_dir": "LIM/embeddings/rsna/resnet50/embeddings",
+  "metadata_path": "LIM/embeddings/rsna/resnet50/metadata/rsna_metadata.csv",
+  "img_dir": "/mnt/disk2/srtp2024/LIM/CCBBD/LIM_data/rsna/images",
+  "label_csv": "/mnt/disk2/srtp2024/LIM/CCBBD/LIM_data/rsna/labels.csv"
+}

@@ -1,0 +1,44 @@
+'timed out' thrown while requesting HEAD https://huggingface.co/timm/resnet50.a1_in1k/resolve/main/model.safetensors
+Retrying in 1s [Retry 1/5].
+'timed out' thrown while requesting HEAD https://huggingface.co/timm/resnet50.a1_in1k/resolve/main/model.safetensors
+Retrying in 2s [Retry 2/5].
+'timed out' thrown while requesting HEAD https://huggingface.co/timm/resnet50.a1_in1k/resolve/main/model.safetensors
+Retrying in 4s [Retry 3/5].
+'timed out' thrown while requesting HEAD https://huggingface.co/timm/resnet50.a1_in1k/resolve/main/model.safetensors
+Retrying in 8s [Retry 4/5].
+'timed out' thrown while requesting HEAD https://huggingface.co/timm/resnet50.a1_in1k/resolve/main/model.safetensors
+Retrying in 8s [Retry 5/5].
+'timed out' thrown while requesting HEAD https://huggingface.co/timm/resnet50.a1_in1k/resolve/main/model.safetensors
+'timed out' thrown while requesting HEAD https://huggingface.co/timm/resnet50.a1_in1k/resolve/main/pytorch_model.bin
+Retrying in 1s [Retry 1/5].
+'timed out' thrown while requesting HEAD https://huggingface.co/timm/resnet50.a1_in1k/resolve/main/pytorch_model.bin
+Retrying in 2s [Retry 2/5].
+'timed out' thrown while requesting HEAD https://huggingface.co/timm/resnet50.a1_in1k/resolve/main/pytorch_model.bin
+Retrying in 4s [Retry 3/5].
+'timed out' thrown while requesting HEAD https://huggingface.co/timm/resnet50.a1_in1k/resolve/main/pytorch_model.bin
+Retrying in 8s [Retry 4/5].
+'timed out' thrown while requesting HEAD https://huggingface.co/timm/resnet50.a1_in1k/resolve/main/pytorch_model.bin
+Retrying in 8s [Retry 5/5].
+'timed out' thrown while requesting HEAD https://huggingface.co/timm/resnet50.a1_in1k/resolve/main/pytorch_model.bin
+Hub download failed, loading local weights for resnet50...
+  Loaded local weights: /tmp/timm_weights/resnet50.safetensors
+Model: resnet50 (feat_dim=2048) ready on cuda
+Extracting resnet50:   0%|          | 0/49 [00:00<?, ?it/s]Extracting resnet50:   0%|          | 0/49 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/mnt/disk2/srtp2024/LIM/CCBBD/LIM/code/extract_cnn_embeddings.py", line 319, in <module>
+    main()
+  File "/mnt/disk2/srtp2024/LIM/CCBBD/LIM/code/extract_cnn_embeddings.py", line 246, in main
+    for case_ids, images in tqdm(loader, desc=f"Extracting {args.model}"):
+  File "/mnt/disk2/srtp2024/miniconda3/envs/LIM_boneage/lib/python3.10/site-packages/tqdm/std.py", line 1181, in __iter__
+    for obj in iterable:
+  File "/mnt/disk2/srtp2024/miniconda3/envs/LIM_boneage/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 630, in __next__
+    data = self._next_data()
+  File "/mnt/disk2/srtp2024/miniconda3/envs/LIM_boneage/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 674, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/mnt/disk2/srtp2024/miniconda3/envs/LIM_boneage/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 51, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/mnt/disk2/srtp2024/miniconda3/envs/LIM_boneage/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 51, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/mnt/disk2/srtp2024/LIM/CCBBD/LIM/code/extract_cnn_embeddings.py", line 176, in __getitem__
+    img_path = self.img_dir / self.img_fmt.format(img_id if isinstance(img_id, int) else case_id)
+ValueError: Unknown format code 'd' for object of type 'str'

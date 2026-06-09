@@ -1,0 +1,38 @@
+Error while loading conda entry point: conda-libmamba-solver (/mnt/disk2/srtp2024/miniconda3/lib/python3.13/site-packages/libmambapy/../../../libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /mnt/disk2/srtp2024/miniconda3/lib/python3.13/site-packages/libmambapy/bindings.cpython-313-x86_64-linux-gnu.so))
+Error while loading conda entry point: conda-libmamba-solver (/mnt/disk2/srtp2024/miniconda3/lib/python3.13/site-packages/libmambapy/../../../libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /mnt/disk2/srtp2024/miniconda3/lib/python3.13/site-packages/libmambapy/bindings.cpython-313-x86_64-linux-gnu.so))
+Error while loading conda entry point: conda-libmamba-solver (/mnt/disk2/srtp2024/miniconda3/lib/python3.13/site-packages/libmambapy/../../../libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /mnt/disk2/srtp2024/miniconda3/lib/python3.13/site-packages/libmambapy/bindings.cpython-313-x86_64-linux-gnu.so))
+/mnt/disk2/srtp2024/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+/mnt/disk2/srtp2024/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py:34: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+/mnt/disk2/srtp2024/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py:41: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+
+Building RSNA vision library:   0%|          | 0/12611 [00:00<?, ?img/s]Traceback (most recent call last):
+  File "LIM/code/build_vision_library.py", line 582, in <module>
+    main()
+  File "LIM/code/build_vision_library.py", line 578, in main
+    build_vision_library(args)
+  File "LIM/code/build_vision_library.py", line 462, in build_vision_library
+    features = backbone.forward_features(images)["x_norm_clstoken"]
+  File "/mnt/disk2/srtp2024/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/models/vision_transformer.py", line 264, in forward_features
+    x = blk(x)
+  File "/mnt/disk2/srtp2024/miniconda3/envs/LIM_DL/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/mnt/disk2/srtp2024/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py", line 311, in forward
+    return super().forward(x_or_x_list)
+  File "/mnt/disk2/srtp2024/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py", line 113, in forward
+    x = x + attn_residual_func(x)
+  File "/mnt/disk2/srtp2024/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py", line 92, in attn_residual_func
+    return self.ls1(self.attn(self.norm1(x)))
+  File "/mnt/disk2/srtp2024/miniconda3/envs/LIM_DL/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/mnt/disk2/srtp2024/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py", line 88, in forward
+    return super().forward(x)
+  File "/mnt/disk2/srtp2024/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py", line 75, in forward
+    x = nn.functional.scaled_dot_product_attention(
+AttributeError: module 'torch.nn.functional' has no attribute 'scaled_dot_product_attention'
+
+Building RSNA vision library:   0%|          | 0/12611 [00:30<?, ?img/s]ERROR conda.cli.main_run:execute(142): `conda run python LIM/code/build_vision_library.py --dataset rsna --output-dir LIM/embeddings/rsna/dinov2_vits --batch-size 64` failed. (See above for error)
+Loaded DINOv2 backbone from local repo: /mnt/disk2/srtp2024/.cache/torch/hub/facebookresearch_dinov2_main
+Resume mode: found 0 existing cases, skip 0 cases, remaining 12611 cases.

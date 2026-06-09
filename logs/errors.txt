@@ -1,0 +1,59 @@
+# LIM 异常/不匹配记录
+
+> 发现即写，不默默修正。
+
+## 2026-06-07
+
+### timm 1.0.27 兼容性修复 (extract_cnn_embeddings.py)
+- `resolve_data_config(model_name=...)` 在新版 timm 中已废弃
+- `create_transform(**data_cfg, crop_pct=...)` 在新版中 crop_pct 已含在 data_cfg 中
+- 改用: `create_model(pretrained=False)` → `resolve_data_config(model=model)` → `setdefault("crop_pct", 0.875)` → `create_transform(**data_cfg)`
+
+### DINOv2 hub Python 3.8 兼容性
+- facebookresearch_dinov2 的 `attention.py`, `block.py` 使用 `float | None` 语法 (Python 3.10+)
+- 在缓存文件 `~/.cache/torch/hub/facebookresearch_dinov2_main/` 对应文件添加了 `from __future__ import annotations`
+
+### LIM 与 bone/ 的关键差异
+
+1. **GW-MAE 实现不同** ✅ train_mlp.py 已处理
+   - LIM: `gw_mae.py` → 连续高斯加权 `GrowthWeightedMAELoss` (峰值120月, sigma=36)
+   - bone/: `eval_utils.py` → 分段常数 `GrowthWindowWeights`
+   - 决策: `train_mlp.py` 使用 LIM 的 `CombinedLoss`，metrics 也用 `GrowthWeightedMAELoss.weight()`
+
+2. **MLP 结构参数不同**
+   - LIM文档: 512→128→1 (myproject_instruction.md 第6.2节)
+   - bone/ 实际: `train_mlp_from_embeddings.py` 默认 hidden_dims=512,128
+   - 决策: `train_mlp.py` 默认 512→128，通过 `--hidden-dims` 控制
+
+3. **损失函数控制方式不同**
+   - LIM: `--alpha-mae` + `--beta-gw-mae` 独立控制
+   - bone/: `WeightedAgeLoss` 内部混合
+   - 决策: `train_mlp.py` 使用 `CombinedLoss(alpha_mae, beta_gw_mae)` 参数化
+
+4. **Embedding 均使用原始预训练权重**
+   - 禁止使用 `骨龄/bone/dinov2/bone_age_predictor_best.pth` (学长微调权重)
+   - DINOv2 → torch.hub 加载原始权重
+   - CNN → timm 加载 ImageNet-1k 预训练权重
+
+5. **train_mlp.py 自包含**（2026-06-07）
+   - 不依赖 bone/agents/mlp_age_service.py
+   - 模型/数据集/指标全部内联在 LIM/code/train_mlp.py
+   - 损失函数从 LIM/code/utils/gw_mae.py 导入 CombinedLoss
+   - 输出目录: LIM/experiments/{exp_id}/
+
+### RHPE 数据差异
+
+- RHPE 训练图片 5,496 张，CSV 只有 5,491 行 → 5 张图无标签（属于正常，key point 匹配即可）
+- RHPE 验证图片 716 张，CSV 只有 713 行 → 3 张图无标签
+- RHPE 测试集 80 张，无 boneage 标签 → 不可用于评估，只能做展示推理
+
+### 禁止事项 (来自 myproject_instruction.md)
+
+- ❌ 禁止在 骨龄/bone/ 下写入任何文件
+- ❌ 禁止使用 bone_age_predictor_best.pth
+- ❌ 禁止使用 weixin_imgs 数据集
+- ❌ 禁止硬编码绝对路径
+- ❌ 禁止在 RHPE 上训练 (仅推理)
+- ❌ 禁止使用 jet/rainbow/hsv 色图P2 FAIL - rhpe/resnet50 - count 0 != 6204
+P2 FAIL - rhpe/efficientnet_b4 - count 0 != 6204
+P4 WARN - E01_resnet50_mae_nogender - val_mae=15.19

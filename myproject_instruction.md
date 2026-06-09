@@ -137,8 +137,8 @@ conda run -n boneage pip install timm efficientnet_pytorch matplotlib seaborn sc
 
 所有脚本必须在顶部定义以下路径常量，**不得硬编码绝对路径到其他位置**。
 
-LIM/ 与 骨龄/、bone/ 平级，因此 `LIM_ROOT/../骨龄/bone/` 即为数据目录。
-所有数据路径统一通过 `LIM_ROOT/../骨龄/bone/...` 引用。
+LIM/ 与 LIM_data/ 平级（均在项目根目录下），因此 `LIM_ROOT/../LIM_data/` 即为数据目录。
+所有数据路径统一通过 `LIM_ROOT/../LIM_data/...` 引用。
 
 ```python
 import os
@@ -146,21 +146,15 @@ import os
 # ── 项目根目录（相对于脚本位置自动推导，无需修改）──
 SCRIPT_DIR   = os.path.dirname(os.path.abspath(__file__))          # LIM/code/utils/
 LIM_ROOT     = os.path.abspath(os.path.join(SCRIPT_DIR, "../.."))   # LIM/
-DATA_ROOT    = os.path.join(LIM_ROOT, "..", "骨龄", "bone")        # 骨龄/bone/
+DATA_ROOT    = os.path.join(LIM_ROOT, "..", "LIM_data")            # LIM_data/
 
-# ── 原始数据（只读，禁止写入）──
-RSNA_IMG_DIR = os.path.join(DATA_ROOT, "boneage-training-dataset",
-                             "boneage-training-dataset")
-RSNA_TRAIN_CSV = os.path.join(DATA_ROOT, "boneage-training-dataset.csv")
-RSNA_TEST_CSV  = os.path.join(DATA_ROOT, "boneage-test-dataset.csv")
+# ── RSNA 数据 ──
+RSNA_IMG_DIR  = os.path.join(DATA_ROOT, "rsna", "images")
+RSNA_LABELS   = os.path.join(DATA_ROOT, "rsna", "labels.csv")
 
-RHPE_TRAIN_IMG = os.path.join(DATA_ROOT, "RHPE_train", "images")
-RHPE_VAL_IMG   = os.path.join(DATA_ROOT, "RHPE_val",   "images")
-RHPE_TEST_IMG  = os.path.join(DATA_ROOT, "RHPE_test",  "images")
-RHPE_TRAIN_CSV = os.path.join(DATA_ROOT, "RHPE_Annotations",
-                               "RHPE_Annotations", "BONEAGE", "boneage_train.csv")
-RHPE_VAL_CSV   = os.path.join(DATA_ROOT, "RHPE_Annotations",
-                               "RHPE_Annotations", "BONEAGE", "boneage_val.csv")
+# ── RHPE 数据（所有有标签图像已合并至同一目录）──
+RHPE_IMG_DIR  = os.path.join(DATA_ROOT, "rhpe", "images")
+RHPE_LABELS   = os.path.join(DATA_ROOT, "rhpe", "labels.csv")
 
 # ── LIM 工作区输出目录（可写）──
 EMB_ROOT     = os.path.join(LIM_ROOT, "embeddings")
@@ -179,16 +173,16 @@ FIG_ROOT     = os.path.join(LIM_ROOT, "figures")
 原始训练集 ZIP 约 1.2 GB，解压后约 9.2 GB。
 
 **归档位置：** `archive/boneage-training-dataset/`（项目根目录下，与 LIM/ 平级）。
-若 `骨龄/bone/boneage-training-dataset/` 下图片损坏或缺失，可从 archive 重新复制：
+若 `LIM_data/rsna/images/` 下图片损坏或缺失，可从 archive 重新复制：
 
 ```powershell
 Copy-Item "archive/boneage-training-dataset/boneage-training-dataset/*.png"`
-  "骨龄/bone/boneage-training-dataset/boneage-training-dataset/" -Force
+  "LIM_data/rsna/images/" -Force
 ```
 
 **图片路径规则：**
 ```
-骨龄/bone/boneage-training-dataset/boneage-training-dataset/{id}.png
+LIM_data/rsna/images/{id}.png
 ```
 ID 范围：10000–22611，共 12,611 张（全部已验证非空）。
 
@@ -207,12 +201,10 @@ ID 范围：10000–22611，共 12,611 张（全部已验证非空）。
 
 **图片路径规则：**
 ```
-骨龄/bone/RHPE_train/images/{ID:05d}.png   （ID 从 1 开始，补零至 5 位）
-骨龄/bone/RHPE_val/images/{ID:05d}.png
-骨龄/bone/RHPE_test/images/{ID:05d}.png
+LIM_data/rhpe/images/{ID:05d}.png   （ID 从 1 开始，补零至 5 位）
 ```
 
-**标签 CSV 列说明（boneage_train.csv / boneage_val.csv）：**
+**标签 CSV 列说明（LIM_data/rhpe/labels.csv，合并自原 boneage_train.csv + boneage_val.csv）：**
 
 | 列名 | 类型 | 说明 |
 |---|---|---|
@@ -221,12 +213,10 @@ ID 范围：10000–22611，共 12,611 张（全部已验证非空）。
 | Boneage | int | 骨龄（月），范围 12–228 |
 | Chronological | int | 实际日历年龄（月） |
 
-**重要说明：**
+**说明：**
 - 本项目预测目标为 `Boneage`（骨龄），不是 `Chronological`（日历年龄）。
-- RHPE 测试集（RHPE_test/）无对应标注 CSV（boneage_test.csv 不存在），
-  跨数据集泛化测试使用 RHPE 验证集（boneage_val.csv，713 条）。
-- RHPE 训练集与验证集合并后共 6,204 条，
-  在跨数据集泛化实验中**全部作为推理目标，不参与训练**。
+- RHPE 原始数据分为 train/val/test，已在 `LIM_data/` 中将有标签图像（train+val）合并至同一目录，labels.csv 包含全部 **6,204** 条有标签样本。
+- 在跨数据集泛化实验中，全部 6,204 条均作为推理目标，不参与训练。
 
 ### 4.3 数据完整性检查
 
@@ -251,11 +241,10 @@ def check_dataset_integrity(csv_path, img_dir, id_col, id_fmt="{}.png"):
     return len(missing) == 0
 
 # RSNA
-check_dataset_integrity(RSNA_TRAIN_CSV, RSNA_IMG_DIR, "id", "{}.png")
+check_dataset_integrity("LIM_data/rsna/labels.csv", "LIM_data/rsna/images", "id", "{}.png")
 
 # RHPE（ID 补零至 5 位）
-check_dataset_integrity(RHPE_TRAIN_CSV, RHPE_TRAIN_IMG, "ID", "{:05d}.png")
-check_dataset_integrity(RHPE_VAL_CSV,   RHPE_VAL_IMG,   "ID", "{:05d}.png")
+check_dataset_integrity("LIM_data/rhpe/labels.csv", "LIM_data/rhpe/images", "ID", "{:05d}.png")
 ```
 
 ---
@@ -288,13 +277,13 @@ check_dataset_integrity(RHPE_VAL_CSV,   RHPE_VAL_IMG,   "ID", "{:05d}.png")
 ```
 需要上传的内容：
 ├── LIM/code/build_vision_library.py   ← 提取脚本
+├── LIM/code/extract_cnn_embeddings.py ← CNN 提取脚本
+├── LIM/code/train_mlp.py              ← MLP 训练脚本
 ├── LIM/code/utils/data_utils.py       ← 工具函数
-├── 骨龄/bone/boneage-training-dataset/ ← RSNA 图片（若服务器尚无）
-├── 骨龄/bone/boneage-training-dataset.csv
-├── 骨龄/bone/RHPE_train/              ← RHPE 图片（若服务器尚无）
-├── 骨龄/bone/RHPE_val/
-├── 骨龄/bone/RHPE_Annotations/        ← RHPE 标签
-└── LIM/embeddings/                    ← 空目录结构（提前建好）
+├── LIM_data/rsna/images/              ← RSNA 图片（若服务器尚无）
+├── LIM_data/rsna/labels.csv           ← RSNA 标签
+├── LIM_data/rhpe/images/              ← RHPE 图片（若服务器尚无）
+└── LIM_data/rhpe/labels.csv           ← RHPE 标签
 ```
 
 推荐使用 scp 或 rsync 上传：
@@ -304,8 +293,11 @@ check_dataset_integrity(RHPE_VAL_CSV,   RHPE_VAL_IMG,   "ID", "{:05d}.png")
 scp LIM/code/build_vision_library.py user@server:/path/to/LIM/code/
 
 # 上传数据（仅首次，数据量大，建议 rsync 断点续传）
-rsync -avz --progress 骨龄/bone/boneage-training-dataset/ \
-  user@server:/path/to/骨龄/bone/boneage-training-dataset/
+rsync -avz --progress LIM_data/rsna/images/ \
+  user@server:/path/to/LIM_data/rsna/images/
+
+rsync -avz --progress LIM_data/rhpe/images/ \
+  user@server:/path/to/LIM_data/rhpe/images/
 ```
 
 #### 5.0.3 服务器上挂后台运行
@@ -642,7 +634,7 @@ class CombinedLoss(nn.Module):
 conda run -n boneage python LIM/code/train_mlp.py ^
   --embeddings-dir LIM/embeddings/rsna/{backbone}/embeddings ^
   --metadata-csv   LIM/embeddings/rsna/{backbone}/metadata/rsna_metadata.csv ^
-  --labels-csv     骨龄/bone/boneage-training-dataset.csv ^
+  --labels-csv     LIM_data/rsna/labels.csv ^
   --output-dir     LIM/experiments/{exp_id} ^
   --alpha-mae 1.0 --beta-gw-mae 0.0 ^
   [--no-gender] ^
@@ -664,7 +656,7 @@ conda run -n boneage python LIM/code/train_mlp.py ^
 conda run -n boneage python LIM/code/train_mlp.py ^
   --embeddings-dir LIM/embeddings/rsna/resnet50/embeddings ^
   --metadata-csv   LIM/embeddings/rsna/resnet50/metadata/rsna_metadata.csv ^
-  --labels-csv     骨龄/bone/boneage-training-dataset.csv ^
+  --labels-csv     LIM_data/rsna/labels.csv ^
   --output-dir     LIM/experiments/E01_resnet50_mae_nogender ^
   --alpha-mae 1.0 --beta-gw-mae 0.0 ^
   --no-gender ^
@@ -677,7 +669,7 @@ conda run -n boneage python LIM/code/train_mlp.py ^
 conda run -n boneage python LIM/code/train_mlp.py ^
   --embeddings-dir LIM/embeddings/rsna/dinov2_vitg/embeddings ^
   --metadata-csv   LIM/embeddings/rsna/dinov2_vitg/metadata/rsna_metadata.csv ^
-  --labels-csv     骨龄/bone/boneage-training-dataset.csv ^
+  --labels-csv     LIM_data/rsna/labels.csv ^
   --output-dir     LIM/experiments/E23_vitg_gwmae_gender ^
   --alpha-mae 0.0 --beta-gw-mae 1.0 ^
   --cpu
@@ -726,7 +718,7 @@ conda run -n boneage python LIM/code/infer_rhpe.py ^
   --model-path     LIM/experiments/E24_vitg_combined_gender/best.pt ^
   --embeddings-dir LIM/embeddings/rhpe/dinov2_vitg/embeddings ^
   --metadata-csv   LIM/embeddings/rhpe/dinov2_vitg/metadata/rhpe_metadata.csv ^
-  --labels-csv     骨龄/bone/RHPE_Annotations/RHPE_Annotations/BONEAGE/boneage_val.csv ^
+  --labels-csv     LIM_data/rhpe/labels.csv ^
   --output-dir     LIM/generalization/best_model_on_rhpe
 ```
 
@@ -1078,7 +1070,7 @@ print(f'Metadata rows: {len(df)}, null true_age: {df.true_age.isnull().sum()}')
 
 ## 12. 禁止事项
 
-1. **禁止在 骨龄/bone/ 目录下写入任何新文件**（该目录为只读原始数据区）。
+1. **禁止在 LIM_data/ 目录下写入任何新文件**（该目录为只读原始数据区，所有产出写入 LIM/ 下的对应目录）。
 2. **禁止使用 骨龄/bone/dinov2/bone_age_predictor_best.pth**（学长微调权重，
    来路不透明，不得用于本项目任何 embedding 提取）。
 3. **禁止使用 骨龄/weixin_imgs/ 数据集**（数据来源不清晰）。

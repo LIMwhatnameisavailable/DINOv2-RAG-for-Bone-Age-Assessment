@@ -1,0 +1,44 @@
+{
+  "dataset": "rhpe",
+  "device": "cuda",
+  "amp_enabled": true,
+  "amp_dtype": "float16",
+  "channels_last": false,
+  "num_samples": 6204,
+  "existing_samples": 0,
+  "missing_embeddings_reprocessed": 0,
+  "new_samples": 6204,
+  "resume_enabled": true,
+  "embedding_mode": "per_case_npy",
+  "num_embedding_files": 6204,
+  "embeddings_dir": "/mnt/disk2/srtp2024/LIM/CCBBD/LIM/embeddings/rhpe/dinov2_vitl/embeddings",
+  "metadata_path": "/mnt/disk2/srtp2024/LIM/CCBBD/LIM/embeddings/rhpe/dinov2_vitl/metadata/rhpe_metadata.csv",
+  "img_dir": "/mnt/disk2/srtp2024/LIM/CCBBD/LIM_data/rhpe/images",
+  "csv_path": "/mnt/disk2/srtp2024/LIM/CCBBD/LIM_data/rhpe/labels.csv",
+  "preprocess": {
+    "no_blur": false,
+    "blur_kernel_size": 9,
+    "blur_sigma": [
+      0.1,
+      2.0
+    ],
+    "resize": [
+      1050,
+      700
+    ],
+    "crop": [
+      1050,
+      700
+    ],
+    "normalize_mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "normalize_std": [
+      0.229,
+      0.224,
+      0.225
+    ]
+  }
+}
